@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -59,7 +61,7 @@ class User extends Authenticatable
     /**
      * Get the document type associated with the user.
      */
-    public function documentType()
+    public function documentType(): BelongsTo
     {
         return $this->belongsTo(DocumentType::class);
     }
@@ -67,7 +69,7 @@ class User extends Authenticatable
     /**
      * Get the gender associated with the user.
      */
-    public function gender()
+    public function gender(): BelongsTo
     {
         return $this->belongsTo(Gender::class);
     }
@@ -75,7 +77,7 @@ class User extends Authenticatable
     /**
      * Get the campus program associated with the user.
      */
-    public function campusProgram()
+    public function campusProgram(): BelongsTo
     {
         return $this->belongsTo(CampusProgram::class);
     }
@@ -83,7 +85,7 @@ class User extends Authenticatable
     /**
      * Get the contacts for the user.
      */
-    public function contacts()
+    public function contacts(): HasMany
     {
         return $this->hasMany(Contact::class);
     }
@@ -91,9 +93,17 @@ class User extends Authenticatable
     /**
      * Get the loans for the user.
      */
-    public function loans()
+    public function loans(): HasMany
     {
         return $this->hasMany(Loan::class);
+    }
+
+    /**
+     * Get the alerts for the user.
+     */
+    public function alerts()
+    {
+        return $this->hasMany(Alert::class);
     }
 
     /**
@@ -101,7 +111,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->role === 'admin';
     }
@@ -111,7 +121,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isStaff()
+    public function isStaff(): bool
     {
         return $this->role === 'staff';
     }
@@ -121,7 +131,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isStudent()
+    public function isStudent(): bool
     {
         return $this->role === 'estudiante';
     }
@@ -131,7 +141,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isProfessor()
+    public function isProfessor(): bool
     {
         return $this->role === 'profesor';
     }

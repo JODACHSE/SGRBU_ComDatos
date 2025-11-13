@@ -14,8 +14,8 @@ class CampusController extends Controller
      */
     public function index(): View
     {
-        return view('campuses.index', [
-            'campuses' => Campus::latest()->paginate(20)
+        return view('modules.campuses.index', [
+            'campuses' => Campus::withCount('programs')->latest()->paginate(20)
         ]);
     }
 
@@ -24,7 +24,7 @@ class CampusController extends Controller
      */
     public function create(): View
     {
-        return view('campuses.create');
+        return view('modules.campuses.create'); // CORREGIDO: cambiado de 'campuses.create'
     }
 
     /**
@@ -50,7 +50,7 @@ class CampusController extends Controller
      */
     public function show(Campus $campus): View
     {
-        return view('campuses.show', [
+        return view('modules.campuses.show', [
             'campus' => $campus->load(['programs', 'resources', 'loans'])
         ]);
     }
@@ -60,7 +60,7 @@ class CampusController extends Controller
      */
     public function edit(Campus $campus): View
     {
-        return view('campuses.edit', compact('campus'));
+        return view('modules.campuses.edit', compact('campus')); // CORREGIDO: cambiado de 'campuses.edit'
     }
 
     /**

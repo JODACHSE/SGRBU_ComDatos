@@ -14,8 +14,11 @@ class DocumentTypeController extends Controller
      */
     public function index(): View
     {
-        return view('document-types.index', [
-            'documentTypes' => DocumentType::latest()->paginate(20)
+        return view('modules.catalogs.index', [
+            'catalogs' => ['genders', 'document-types', 'contact-types', 'program-types', 'resource-types', 'resource-statuses'],
+            'selectedCatalog' => 'document-types',
+            'records' => DocumentType::latest()->paginate(20),
+            'modelName' => 'DocumentType'
         ]);
     }
 
@@ -24,7 +27,9 @@ class DocumentTypeController extends Controller
      */
     public function create(): View
     {
-        return view('document-types.create');
+        return view('modules.catalogs.create', [
+            'catalogName' => 'document-types'
+        ]);
     }
 
     /**
@@ -48,7 +53,10 @@ class DocumentTypeController extends Controller
      */
     public function show(DocumentType $documentType): View
     {
-        return view('document-types.show', compact('documentType'));
+        return view('modules.catalogs.show', [
+            'record' => $documentType,
+            'catalogName' => 'document-types'
+        ]);
     }
 
     /**
@@ -56,7 +64,10 @@ class DocumentTypeController extends Controller
      */
     public function edit(DocumentType $documentType): View
     {
-        return view('document-types.edit', compact('documentType'));
+        return view('modules.catalogs.edit', [
+            'record' => $documentType,
+            'catalogName' => 'document-types'
+        ]);
     }
 
     /**

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Home')
+@section('title', 'Dashboard')
 
 @section('content')
 
@@ -34,87 +34,45 @@
 </div>
 @endif
 
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">{{ __('Dashboard') }}</div>
-
-            <div class="card-body">
-                @if (session('status'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
-                </div>
-                @endif
-
-                <div class="text-center mb-4">
-                    <h4>Hola {{ $user->name }} {{ $user->lastname }}</h4>
-                    <p class="text-muted">Bienvenido al home view de {{ $userType }}</p>
-                    <span class="badge bg-primary">{{ $userType }}</span>
-                </div>
-
-                <!-- Estadísticas rápidas basadas en el rol -->
-                <div class="row">
-                    @if(in_array($user->role, ['admin', 'staff']))
-                    <div class="col-md-4 mb-3">
-                        <div class="card text-white bg-primary">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">{{ App\Models\User::count() }}</h5>
-                                <p class="card-text">Usuarios</p>
-                            </div>
+<div class="container-fluid">
+    <!-- Header de Bienvenida -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="card-title mb-1">¡Hola {{ $user->name }} {{ $user->lastname }}!</h4>
+                            <p class="card-text mb-0">Bienvenido al sistema de gestión de recursos</p>
                         </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card text-white bg-success">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">{{ App\Models\Resource::count() }}</h5>
-                                <p class="card-text">Recursos</p>
-                            </div>
+                        <div class="col-md-4 text-end">
+                            <span class="badge bg-light text-primary fs-6">{{ $userType }}</span>
+                            <p class="mb-0 mt-2"><small>{{ now()->format('l, d F Y') }}</small></p>
                         </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card text-white bg-warning">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">{{ App\Models\Loan::where('loan_status', 'activo')->count() }}</h5>
-                                <p class="card-text">Préstamos Activos</p>
-                            </div>
-                        </div>
-                    </div>
-                    @else
-                    <div class="col-md-6 mb-3">
-                        <div class="card text-white bg-info">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">{{ $user->loans()->count() }}</h5>
-                                <p class="card-text">Mis Préstamos</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="card text-white bg-success">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">{{ App\Models\Resource::where('is_active', true)->where('resource_status_id', 1)->count() }}</h5>
-                                <p class="card-text">Recursos Disponibles</p>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-                </div>
-
-                <!-- Acciones rápidas -->
-                <div class="mt-4">
-                    <h5>Acciones Rápidas</h5>
-                    <div class="d-grid gap-2 d-md-flex">
-                        @if(in_array($user->role, ['admin', 'staff']))
-                        <a href="{{ route('users.index') }}" class="btn btn-outline-primary me-md-2">Gestionar Usuarios</a>
-                        <a href="{{ route('resources.index') }}" class="btn btn-outline-success me-md-2">Gestionar Recursos</a>
-                        <a href="{{ route('loans.index') }}" class="btn btn-outline-warning">Ver Préstamos</a>
-                        @else
-                        <a href="{{ route('loans.create') }}" class="btn btn-outline-primary me-md-2">Solicitar Préstamo</a>
-                        <a href="{{ route('loans.index') }}" class="btn btn-outline-info">Mis Préstamos</a>
-                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Dashboard para Admin y Staff -->
+    @if(in_array($user->role, ['admin', 'staff']))
+    @include('modules.dashboards.admin-staff')
+    @endif
+
+    <!-- Dashboard para Estudiantes y Profesores -->
+    @if(in_array($user->role, ['estudiante', 'profesor']))
+    @include('modules.dashboards.student-teacher')
+    @endif
+
 </div>
+
+<!-- Incluir Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Scripts para gráficos -->
+@if(in_array($user->role, ['admin', 'staff']))
+@include('modules.dashboards.charts-scripts')
+@endif
+
 @endsection

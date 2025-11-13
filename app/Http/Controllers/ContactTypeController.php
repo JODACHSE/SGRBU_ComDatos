@@ -14,8 +14,11 @@ class ContactTypeController extends Controller
      */
     public function index(): View
     {
-        return view('contact-types.index', [
-            'contactTypes' => ContactType::latest()->paginate(20)
+        return view('modules.catalogs.index', [
+            'catalogs' => ['genders', 'document-types', 'contact-types', 'program-types', 'resource-types', 'resource-statuses'],
+            'selectedCatalog' => 'contact-types',
+            'records' => ContactType::latest()->paginate(20),
+            'modelName' => 'ContactType'
         ]);
     }
 
@@ -24,7 +27,9 @@ class ContactTypeController extends Controller
      */
     public function create(): View
     {
-        return view('contact-types.create');
+        return view('modules.catalogs.create', [
+            'catalogName' => 'contact-types'
+        ]);
     }
 
     /**
@@ -48,7 +53,10 @@ class ContactTypeController extends Controller
      */
     public function show(ContactType $contactType): View
     {
-        return view('contact-types.show', compact('contactType'));
+        return view('modules.catalogs.show', [
+            'record' => $contactType,
+            'catalogName' => 'contact-types'
+        ]);
     }
 
     /**
@@ -56,7 +64,10 @@ class ContactTypeController extends Controller
      */
     public function edit(ContactType $contactType): View
     {
-        return view('contact-types.edit', compact('contactType'));
+        return view('modules.catalogs.edit', [
+            'record' => $contactType,
+            'catalogName' => 'contact-types'
+        ]);
     }
 
     /**

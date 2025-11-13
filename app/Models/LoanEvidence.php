@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class LoanEvidence extends Model
 {
@@ -15,18 +16,34 @@ class LoanEvidence extends Model
         'loan_type',
         'photo_path',
         'notes',
-        'is_active',
+        'is_active'
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
     ];
 
-    /**
-     * Get the loan resource that owns the loan evidence.
-     */
+    // Relación con LoanResource
     public function loanResource()
     {
         return $this->belongsTo(LoanResource::class);
+    }
+
+    // Accessor para la URL de la foto
+    public function getPhotoUrlAttribute()
+    {
+        return $this->photo_path ? Storage::url($this->photo_path) : null;
+    }
+
+    // Accessor para el tipo de préstamo formateado
+    public function getLoanTypeFormattedAttribute()
+    {
+        return $this->loan_type === 'prestamo' ? 'Préstamo' : 'Devolución';
+    }
+
+    // Scope para activos
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }

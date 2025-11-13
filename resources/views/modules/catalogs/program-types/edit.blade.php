@@ -1,0 +1,15 @@
+@extends('layouts.app')
+
+@section('title', 'Edit Program types')
+
+@section('content')
+<script>
+    window.location.href = "{{ route('catalogs.edit', ['catalog' => 'program-types', 'id' => $programTypes->id]) }}";
+</script>
+<div class="d-flex justify-content-center align-items-center" style="height: 50vh;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Redirigiendo...</span>
+    </div>
+    <p class="ms-3 mb-0">Redirigiendo al sistema de catálogos...</p>
+</div>
+@endsection

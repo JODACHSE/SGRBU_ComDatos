@@ -81,11 +81,11 @@
                                 <i class="bi bi-music-note-beamed text-info display-5"></i>
                             </div>
                             <h4 class="card-title">Instrumentos Musicales</h4>
-                            <p class="card-text text-muted">Instrumentos para prácticas y presentaciones, con sistema de control especial mediante QR.</p>
+                            <p class="card-text text-muted">Instrumentos para prácticas y presentaciones, con registro de disponibilidad y mantenimiento.</p>
                             <ul class="list-unstyled mt-3 text-start">
-                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Control con código QR</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Control de estado</li>
                                 <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Entrega por personal autorizado</li>
-                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Verificación de estado</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Historial de mantenimiento</li>
                             </ul>
                         </div>
                     </div>
@@ -103,83 +103,76 @@
             </div>
 
             <div class="row g-4">
-                <div class="col-lg-3 col-md-6">
-                    <div class="text-center">
-                        <div class="step-number bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white fw-bold mb-3" style="width: 60px; height: 60px;">1</div>
-                        <h5>Explora el Catálogo</h5>
-                        <p class="text-muted">Revisa los recursos disponibles en tu sede universitaria.</p>
-                    </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="step-number bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white fw-bold mb-3" style="width: 60px; height: 60px;">1</div>
+                    <h5>Explora el Catálogo</h5>
+                    <p class="text-muted">Revisa los recursos disponibles en tu sede universitaria.</p>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="text-center">
-                        <div class="step-number bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white fw-bold mb-3" style="width: 60px; height: 60px;">2</div>
-                        <h5>Solicita el Recurso</h5>
-                        <p class="text-muted">Selecciona fecha y hora de recogida según disponibilidad.</p>
-                    </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="step-number bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white fw-bold mb-3" style="width: 60px; height: 60px;">2</div>
+                    <h5>Solicita el Recurso</h5>
+                    <p class="text-muted">Selecciona fecha y hora de recogida según disponibilidad.</p>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="text-center">
-                        <div class="step-number bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white fw-bold mb-3" style="width: 60px; height: 60px;">3</div>
-                        <h5>Recoge tu Recurso</h5>
-                        <p class="text-muted">Para instrumentos musicales, presenta tu código QR al personal.</p>
-                    </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="step-number bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white fw-bold mb-3" style="width: 60px; height: 60px;">3</div>
+                    <h5>Recoge tu Recurso</h5>
+                    <p class="text-muted">Presenta tu documento institucional al personal autorizado.</p>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="text-center">
-                        <div class="step-number bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white fw-bold mb-3" style="width: 60px; height: 60px;">4</div>
-                        <h5>Disfruta y Devuelve</h5>
-                        <p class="text-muted">Usa el recurso y devuélvelo en el tiempo establecido.</p>
-                    </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="step-number bg-primary rounded-circle d-inline-flex align-items-center justify-content-center text-white fw-bold mb-3" style="width: 60px; height: 60px;">4</div>
+                    <h5>Disfruta y Devuelve</h5>
+                    <p class="text-muted">Usa el recurso y devuélvelo en el tiempo establecido.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- QR System Highlight -->
+    <!-- Resource Maintenance Section (replacement for QR system) -->
     <section class="py-5 bg-white">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h2 class="fw-bold mb-4">Sistema Exclusivo QR para Instrumentos</h2>
-                    <p class="mb-4">Para garantizar la seguridad y correcto manejo de los instrumentos musicales, implementamos un sistema de control mediante códigos QR.</p>
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="fw-bold mb-4">Mantenimiento y Seguridad de los Recursos</h2>
+                    <p class="mb-4">Para asegurar el buen uso y durabilidad de los recursos, el sistema integra un módulo de mantenimiento y revisión periódica.</p>
 
                     <div class="d-flex mb-3">
                         <div class="me-3">
-                            <i class="bi bi-qr-code-scan text-primary display-6"></i>
+                            <i class="bi bi-tools text-primary display-6"></i>
                         </div>
                         <div>
-                            <h5>Control de Acceso</h5>
-                            <p class="text-muted mb-0">Solo el personal autorizado puede entregar y recibir instrumentos escaneando el código QR.</p>
+                            <h5>Revisión Preventiva</h5>
+                            <p class="text-muted mb-0">Cada recurso es inspeccionado regularmente por el equipo técnico antes de su préstamo.</p>
                         </div>
                     </div>
 
                     <div class="d-flex mb-3">
                         <div class="me-3">
-                            <i class="bi bi-clock-history text-primary display-6"></i>
+                            <i class="bi bi-file-earmark-text text-primary display-6"></i>
                         </div>
                         <div>
-                            <h5>Registro de Movimientos</h5>
-                            <p class="text-muted mb-0">Cada préstamo y devolución queda registrado con fecha, hora y responsable.</p>
+                            <h5>Historial de Uso</h5>
+                            <p class="text-muted mb-0">Se mantiene un registro completo de préstamos, devoluciones y observaciones de estado.</p>
                         </div>
                     </div>
 
                     <div class="d-flex">
                         <div class="me-3">
-                            <i class="bi bi-shield-check text-primary display-6"></i>
+                            <i class="bi bi-person-check text-primary display-6"></i>
                         </div>
                         <div>
-                            <h5>Verificación de Estado</h5>
-                            <p class="text-muted mb-0">El personal verifica el estado del instrumento antes y después de cada préstamo.</p>
+                            <h5>Gestión Responsable</h5>
+                            <p class="text-muted mb-0">El personal autorizado garantiza el correcto manejo y reporte de cada recurso institucional.</p>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-6 text-center">
-                    <div class="qr-demo bg-light rounded-3 p-4 shadow-sm">
-                        <img src="{{ asset('images/welcome/qr-code-u-cundinamarca.jpg') }}"
-                            alt="Código QR Universidad de Cundinamarca"
+                    <div class="bg-light rounded-3 p-4 shadow-sm">
+                        <img src="{{ asset('images/welcome/inventario.png') }}"
+                            alt="Mantenimiento de Recursos"
                             class="img-fluid rounded"
-                            style="max-width: 250px;">
-                        <p class="mt-3 text-muted">Ejemplo de Código QR</p>
+                            style="max-width: 350px;">
+                        <p class="mt-3 text-muted">Supervisión y control institucional</p>
                     </div>
                 </div>
             </div>
@@ -208,7 +201,7 @@
                 <div class="col-md-4 text-center">
                     <i class="bi bi-shield-check display-4 mb-3"></i>
                     <h5>Control de Recursos</h5>
-                    <p>Sistema especializado para instrumentos musicales que reduce pérdidas y daños.</p>
+                    <p>Sistema especializado que reduce pérdidas, daños y mejora la trazabilidad.</p>
                 </div>
             </div>
         </div>
@@ -219,7 +212,7 @@
         <div class="container text-center">
             @guest
             <h2 class="fw-bold mb-3">¿Listo para comenzar?</h2>
-            <p class="text-muted mb-4">Comunicate con un <strong>miembro autorizado</strong> para obtener acceso a la plataforma y disfruta de todos los recursos disponibles</p>
+            <p class="text-muted mb-4">Comunícate con un <strong>miembro autorizado</strong> para obtener acceso a la plataforma y disfruta de todos los recursos disponibles.</p>
             @else
             <a href="{{ url('/home') }}" class="btn btn-primary btn-lg px-4">
                 <i class="bi bi-speedometer2 me-2"></i>Ir al Dashboard
@@ -228,81 +221,4 @@
         </div>
     </section>
 </div>
-
-<!-- Custom Styles -->
-<style>
-    .hero-section {
-        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-    }
-
-    .min-vh-75 {
-        min-height: 75vh;
-    }
-
-    .feature-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .step-number {
-        font-size: 1.5rem;
-        transition: transform 0.3s ease;
-    }
-
-    .step-number:hover {
-        transform: scale(1.1);
-    }
-
-    .qr-demo {
-        border: 1px solid #e9ecef;
-        transition: transform 0.3s ease;
-    }
-
-    .qr-demo:hover {
-        transform: translateY(-5px);
-    }
-
-    /* Smooth scroll behavior */
-    html {
-        scroll-behavior: smooth;
-    }
-
-    @media (max-width: 768px) {
-        .hero-section .display-4 {
-            font-size: 2rem;
-        }
-    }
-</style>
-
-<!-- Script para manejar tabs específicos en el modal -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Manejar botones que abren el modal en un tab específico
-        const authButtons = document.querySelectorAll('[data-bs-tab]');
-        authButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const tabName = this.getAttribute('data-bs-tab');
-                // Este código se ejecutará después de que se abra el modal
-                setTimeout(() => {
-                    const tabElement = document.querySelector(`[data-bs-target="#tab-${tabName}"]`);
-                    if (tabElement) {
-                        new bootstrap.Tab(tabElement).show();
-                    }
-                }, 500);
-            });
-        });
-
-        // Manejar fallbacks de imágenes
-        const images = document.querySelectorAll('img');
-        images.forEach(img => {
-            img.addEventListener('error', function() {
-                console.warn('Error loading image:', this.src);
-            });
-        });
-    });
-</script>
 @endsection

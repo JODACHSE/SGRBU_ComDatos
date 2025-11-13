@@ -17,10 +17,10 @@ Route::view('/modelos', 'modelos')->name('modelos');
 Route::middleware('guest')->group(function () {
     Route::get('/login', fn() => redirect('/?auth_tab=login'))->name('login');
     Route::post('/login', [LoginController::class, 'login']);
-    
+
     Route::get('/password/reset', fn() => redirect('/?auth_tab=reset'))->name('password.request');
     Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-    
+
     Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 });
@@ -30,10 +30,10 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 
 // Rutas protegidas
 Route::middleware(['auth'])->group(function () {
-    
+
     // Home para todos
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
     // Rutas para Admin y Staff (Gestión completa)
     Route::middleware(['role:admin,staff'])->group(function () {
@@ -51,14 +51,36 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('resource-types', App\Http\Controllers\ResourceTypeController::class);
         Route::resource('loan-resources', App\Http\Controllers\LoanResourceController::class);
         Route::resource('loan-evidences', App\Http\Controllers\LoanEvidenceController::class);
-        Route::view('/catalogs', 'modules.catalogs.index')->name('catalogs.index');
+        Route::resource('alerts', App\Http\Controllers\AlertController::class);
+
+        // Rutas para Alertas
+        Route::get('/alerts/trashed', [App\Http\Controllers\AlertController::class, 'trashed'])->name('alerts.trashed');
+        Route::post('/alerts/{id}/restore', [App\Http\Controllers\AlertController::class, 'restore'])->name('alerts.restore');
+        Route::delete('/alerts/{id}/force-delete', [App\Http\Controllers\AlertController::class, 'forceDelete'])->name('alerts.force-delete');
+
+        // Rutas para Catálogos
+        Route::get('/catalogs', [App\Http\Controllers\CatalogController::class, 'index'])->name('catalogs.index');
+        Route::post('/catalogs/{catalog}/{id}/toggle-active', [App\Http\Controllers\CatalogController::class, 'toggleActive'])->name('catalogs.toggle-active');
+        Route::get('/catalogs/{catalog}/create', [App\Http\Controllers\CatalogController::class, 'create'])->name('catalogs.create');
+        Route::get('/catalogs/{catalog}/{id}', [App\Http\Controllers\CatalogController::class, 'show'])->name('catalogs.show');
+        Route::get('/catalogs/{catalog}/{id}/edit', [App\Http\Controllers\CatalogController::class, 'edit'])->name('catalogs.edit');
+
+        // Rutas para Evidencias de Préstamos
+        Route::resource('loan-evidences', App\Http\Controllers\LoanEvidenceController::class);
+        Route::get('/loan-evidences/trashed', [App\Http\Controllers\LoanEvidenceController::class, 'trashed'])->name('loan-evidences.trashed');
+        Route::post('/loan-evidences/{id}/restore', [App\Http\Controllers\LoanEvidenceController::class, 'restore'])->name('loan-evidences.restore');
+        Route::delete('/loan-evidences/{id}/force-delete', [App\Http\Controllers\LoanEvidenceController::class, 'forceDelete'])->name('loan-evidences.force-delete');
     });
 
     // Préstamos - Accesible para todos los roles
     Route::resource('loans', App\Http\Controllers\LoanController::class);
 
     // Perfil para todos los roles autenticados
-    Route::get('/my-profile', [App\Http\Controllers\UserController::class, 'profile'])->name('users.profile');
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+        Route::get('/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    });
 
     Route::middleware(['role:profesor'])->group(function () {
         Route::get('/inventory', [App\Http\Controllers\ResourceController::class, 'index'])->name('inventory.index');

@@ -14,8 +14,11 @@ class ResourceTypeController extends Controller
      */
     public function index(): View
     {
-        return view('resource-types.index', [
-            'resourceTypes' => ResourceType::latest()->paginate(20)
+        return view('modules.catalogs.index', [
+            'catalogs' => ['genders', 'document-types', 'contact-types', 'program-types', 'resource-types', 'resource-statuses'],
+            'selectedCatalog' => 'resource-types',
+            'records' => ResourceType::latest()->paginate(20),
+            'modelName' => 'ResourceType'
         ]);
     }
 
@@ -24,7 +27,9 @@ class ResourceTypeController extends Controller
      */
     public function create(): View
     {
-        return view('resource-types.create');
+        return view('modules.catalogs.create', [
+            'catalogName' => 'resource-types'
+        ]);
     }
 
     /**
@@ -48,7 +53,10 @@ class ResourceTypeController extends Controller
      */
     public function show(ResourceType $resourceType): View
     {
-        return view('resource-types.show', compact('resourceType'));
+        return view('modules.catalogs.show', [
+            'record' => $resourceType,
+            'catalogName' => 'resource-types'
+        ]);
     }
 
     /**
@@ -56,7 +64,10 @@ class ResourceTypeController extends Controller
      */
     public function edit(ResourceType $resourceType): View
     {
-        return view('resource-types.edit', compact('resourceType'));
+        return view('modules.catalogs.edit', [
+            'record' => $resourceType,
+            'catalogName' => 'resource-types'
+        ]);
     }
 
     /**

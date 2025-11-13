@@ -15,7 +15,7 @@ class ProgramController extends Controller
      */
     public function index(): View
     {
-        return view('programs.index', [
+        return view('modules.programs.index', [  // Cambiado de 'programs.index' a 'modules.programs.index'
             'programs' => Program::with('programType')->latest()->paginate(20)
         ]);
     }
@@ -25,7 +25,7 @@ class ProgramController extends Controller
      */
     public function create(): View
     {
-        return view('programs.create', [
+        return view('modules.programs.create', [  // Cambiado de 'programs.create' a 'modules.programs.create'
             'programTypes' => ProgramType::where('is_active', true)->get()
         ]);
     }
@@ -52,7 +52,7 @@ class ProgramController extends Controller
      */
     public function show(Program $program): View
     {
-        return view('programs.show', [
+        return view('modules.programs.show', [  // Cambiado de 'programs.show' a 'modules.programs.show'
             'program' => $program->load(['programType', 'campuses', 'campusPrograms'])
         ]);
     }
@@ -62,7 +62,7 @@ class ProgramController extends Controller
      */
     public function edit(Program $program): View
     {
-        return view('programs.edit', [
+        return view('modules.programs.edit', [  // Cambiado de 'programs.edit' a 'modules.programs.edit'
             'program' => $program,
             'programTypes' => ProgramType::where('is_active', true)->get()
         ]);

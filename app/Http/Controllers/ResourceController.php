@@ -17,7 +17,7 @@ class ResourceController extends Controller
      */
     public function index(): View
     {
-        return view('resources.index', [
+        return view('modules.resources.index', [
             'resources' => Resource::with(['campus', 'resourceType', 'resourceStatus'])
                 ->latest()
                 ->paginate(20)
@@ -29,7 +29,7 @@ class ResourceController extends Controller
      */
     public function create(): View
     {
-        return view('resources.create', [
+        return view('modules.resources.create', [
             'campuses' => Campus::where('is_active', true)->get(),
             'resourceTypes' => ResourceType::where('is_active', true)->get(),
             'resourceStatuses' => ResourceStatus::where('is_active', true)->get()
@@ -61,8 +61,8 @@ class ResourceController extends Controller
      */
     public function show(Resource $resource): View
     {
-        return view('resources.show', [
-            'resource' => $resource->load(['campus', 'resourceType', 'resourceStatus', 'loanResources'])
+        return view('modules.resources.show', [
+            'resource' => $resource->load(['campus', 'resourceType', 'resourceStatus', 'loanResources.loan'])
         ]);
     }
 
@@ -71,7 +71,7 @@ class ResourceController extends Controller
      */
     public function edit(Resource $resource): View
     {
-        return view('resources.edit', [
+        return view('modules.resources.edit', [
             'resource' => $resource,
             'campuses' => Campus::where('is_active', true)->get(),
             'resourceTypes' => ResourceType::where('is_active', true)->get(),

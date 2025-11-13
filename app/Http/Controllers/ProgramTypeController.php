@@ -14,8 +14,11 @@ class ProgramTypeController extends Controller
      */
     public function index(): View
     {
-        return view('program-types.index', [
-            'programTypes' => ProgramType::latest()->paginate(20)
+        return view('modules.catalogs.index', [
+            'catalogs' => ['genders', 'document-types', 'contact-types', 'program-types', 'resource-types', 'resource-statuses'],
+            'selectedCatalog' => 'program-types',
+            'records' => ProgramType::latest()->paginate(20),
+            'modelName' => 'ProgramType'
         ]);
     }
 
@@ -24,7 +27,9 @@ class ProgramTypeController extends Controller
      */
     public function create(): View
     {
-        return view('program-types.create');
+        return view('modules.catalogs.create', [
+            'catalogName' => 'program-types'
+        ]);
     }
 
     /**
@@ -48,7 +53,10 @@ class ProgramTypeController extends Controller
      */
     public function show(ProgramType $programType): View
     {
-        return view('program-types.show', compact('programType'));
+        return view('modules.catalogs.show', [
+            'record' => $programType,
+            'catalogName' => 'program-types'
+        ]);
     }
 
     /**
@@ -56,7 +64,10 @@ class ProgramTypeController extends Controller
      */
     public function edit(ProgramType $programType): View
     {
-        return view('program-types.edit', compact('programType'));
+        return view('modules.catalogs.edit', [
+            'record' => $programType,
+            'catalogName' => 'program-types'
+        ]);
     }
 
     /**

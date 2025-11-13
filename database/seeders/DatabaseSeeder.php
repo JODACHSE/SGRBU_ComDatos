@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ProgramTypeSeeder::class,
             ProgramSeeder::class,
             CampusSeeder::class,
-            CampusProgramSeeder::class, // Nuevo
+            CampusProgramSeeder::class,
             ResourceTypeSeeder::class,
             ResourceStatusSeeder::class,
             ResourcesSeeder::class,
@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
             'emergency_contact_phone' => '1112223333',
             'email' => 'estudiante@example.com',
             'campus_program_id' => 1, // Relacionado con campus_program
-            'student_code' => 'EST2024001',
+            'student_code' => 'EST2024001', // Código único
             'password' => bcrypt('password'),
         ]);
 
@@ -83,7 +83,12 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            ContactsSeeder::class, // Nuevo
+            ContactsSeeder::class,
+            AdditionalUsersSeeder::class, // Nuevo - Corregido
+            LoansSeeder::class, // Nuevo
+            LoanResourcesSeeder::class, // Nuevo
+            LoanEvidencesSeeder::class, // Nuevo
+            AlertsSeeder::class, // Nuevo
         ]);
     }
 }

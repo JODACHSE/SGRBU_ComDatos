@@ -51,4 +51,12 @@ class Loan extends Model
     {
         return $this->hasMany(LoanResource::class);
     }
+
+    /**
+     * Get the alerts for the loan.
+     */
+    public function alerts()
+    {
+        return $this->hasMany(Alert::class);
+    }
 }

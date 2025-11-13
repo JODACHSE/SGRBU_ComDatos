@@ -14,8 +14,11 @@ class ResourceStatusController extends Controller
      */
     public function index(): View
     {
-        return view('resource-statuses.index', [
-            'resourceStatuses' => ResourceStatus::latest()->paginate(20)
+        return view('modules.catalogs.index', [
+            'catalogs' => ['genders', 'document-types', 'contact-types', 'program-types', 'resource-types', 'resource-statuses'],
+            'selectedCatalog' => 'resource-statuses',
+            'records' => ResourceStatus::latest()->paginate(20),
+            'modelName' => 'ResourceStatus'
         ]);
     }
 
@@ -24,7 +27,9 @@ class ResourceStatusController extends Controller
      */
     public function create(): View
     {
-        return view('resource-statuses.create');
+        return view('modules.catalogs.create', [
+            'catalogName' => 'resource-statuses'
+        ]);
     }
 
     /**
@@ -48,7 +53,10 @@ class ResourceStatusController extends Controller
      */
     public function show(ResourceStatus $resourceStatus): View
     {
-        return view('resource-statuses.show', compact('resourceStatus'));
+        return view('modules.catalogs.show', [
+            'record' => $resourceStatus,
+            'catalogName' => 'resource-statuses'
+        ]);
     }
 
     /**
@@ -56,7 +64,10 @@ class ResourceStatusController extends Controller
      */
     public function edit(ResourceStatus $resourceStatus): View
     {
-        return view('resource-statuses.edit', compact('resourceStatus'));
+        return view('modules.catalogs.edit', [
+            'record' => $resourceStatus,
+            'catalogName' => 'resource-statuses'
+        ]);
     }
 
     /**

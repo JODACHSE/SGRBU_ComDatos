@@ -11,13 +11,26 @@ use Illuminate\View\View;
 
 class ContactController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'role:admin,staff']);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        return view('contacts.index', [
-            'contacts' => Contact::with(['user', 'contactType'])->latest()->paginate(20)
+        $breadcrumbs = [
+            ['name' => 'Dashboard', 'url' => route('home')],
+            ['name' => 'Gestión de Contactos']
+        ];
+
+        return view('modules.contacts.index', [
+            'contacts' => Contact::with(['user', 'contactType'])
+                ->latest()
+                ->paginate(20),
+            'breadcrumbs' => $breadcrumbs
         ]);
     }
 
@@ -26,9 +39,16 @@ class ContactController extends Controller
      */
     public function create(): View
     {
-        return view('contacts.create', [
+        $breadcrumbs = [
+            ['name' => 'Dashboard', 'url' => route('home')],
+            ['name' => 'Gestión de Contactos', 'url' => route('contacts.index')],
+            ['name' => 'Crear Contacto']
+        ];
+
+        return view('modules.contacts.create', [
             'users' => User::where('is_active', true)->get(),
-            'contactTypes' => ContactType::where('is_active', true)->get()
+            'contactTypes' => ContactType::where('is_active', true)->get(),
+            'breadcrumbs' => $breadcrumbs
         ]);
     }
 
@@ -60,8 +80,15 @@ class ContactController extends Controller
      */
     public function show(Contact $contact): View
     {
-        return view('contacts.show', [
-            'contact' => $contact->load(['user', 'contactType'])
+        $breadcrumbs = [
+            ['name' => 'Dashboard', 'url' => route('home')],
+            ['name' => 'Gestión de Contactos', 'url' => route('contacts.index')],
+            ['name' => 'Detalles del Contacto']
+        ];
+
+        return view('modules.contacts.show', [
+            'contact' => $contact->load(['user', 'contactType']),
+            'breadcrumbs' => $breadcrumbs
         ]);
     }
 
@@ -70,10 +97,17 @@ class ContactController extends Controller
      */
     public function edit(Contact $contact): View
     {
-        return view('contacts.edit', [
+        $breadcrumbs = [
+            ['name' => 'Dashboard', 'url' => route('home')],
+            ['name' => 'Gestión de Contactos', 'url' => route('contacts.index')],
+            ['name' => 'Editar Contacto']
+        ];
+
+        return view('modules.contacts.edit', [
             'contact' => $contact,
             'users' => User::where('is_active', true)->get(),
-            'contactTypes' => ContactType::where('is_active', true)->get()
+            'contactTypes' => ContactType::where('is_active', true)->get(),
+            'breadcrumbs' => $breadcrumbs
         ]);
     }
 

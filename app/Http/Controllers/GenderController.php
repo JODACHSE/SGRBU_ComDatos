@@ -14,8 +14,11 @@ class GenderController extends Controller
      */
     public function index(): View
     {
-        return view('genders.index', [
-            'genders' => Gender::latest()->paginate(20)
+        return view('modules.catalogs.index', [
+            'catalogs' => ['genders', 'document-types', 'contact-types', 'program-types', 'resource-types', 'resource-statuses'],
+            'selectedCatalog' => 'genders',
+            'records' => Gender::latest()->paginate(20),
+            'modelName' => 'Gender'
         ]);
     }
 
@@ -24,7 +27,9 @@ class GenderController extends Controller
      */
     public function create(): View
     {
-        return view('genders.create');
+        return view('modules.catalogs.create', [
+            'catalogName' => 'genders'
+        ]);
     }
 
     /**
@@ -48,7 +53,10 @@ class GenderController extends Controller
      */
     public function show(Gender $gender): View
     {
-        return view('genders.show', compact('gender'));
+        return view('modules.catalogs.show', [
+            'record' => $gender,
+            'catalogName' => 'genders'
+        ]);
     }
 
     /**
@@ -56,7 +64,10 @@ class GenderController extends Controller
      */
     public function edit(Gender $gender): View
     {
-        return view('genders.edit', compact('gender'));
+        return view('modules.catalogs.edit', [
+            'record' => $gender,
+            'catalogName' => 'genders'
+        ]);
     }
 
     /**

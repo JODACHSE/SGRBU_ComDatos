@@ -18,18 +18,10 @@
                     <a class="nav-link" href="{{ route('wireframe') }}">Wireframe</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('diagrama') }}">Diagrama</a>
+                    <a class="nav-link" href="{{ route('diagrama') }}">Diagrama de analisis</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Modelos
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ route('modelos') }}#dominio">Dominio</a></li>
-                        <li><a class="dropdown-item" href="{{ route('modelos') }}#comportamiento">Comportamiento</a></li>
-                        <li><a class="dropdown-item" href="{{ route('modelos') }}#base-de-datos">Base de datos</a></li>
-                        <li><a class="dropdown-item" href="{{ route('modelos') }}#clases-back-end">Clases (Back-end)</a></li>
-                    </ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('modelos') }}">Modelos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('arquitectura') }}">Arquitectura</a>

@@ -1,153 +1,258 @@
+{{-- resources/views/modelos.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'Modelos')
-
 @section('content')
-<main class="container py-4">
-    <header class="mb-4">
-        <h1 class="h3 mb-1">Modelos</h1>
-        <p class="text-muted mb-0">Datos, clases, conceptual y estados.</p>
-    </header>
-
-    <ul class="nav nav-tabs" id="modelosTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="tab-datos" data-bs-toggle="tab" data-bs-target="#modelo-datos" type="button" role="tab" aria-controls="modelo-datos" aria-selected="true">
-                Modelo de datos
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-clases" data-bs-toggle="tab" data-bs-target="#modelo-clases" type="button" role="tab" aria-controls="modelo-clases" aria-selected="false">
-                Modelo de clases
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-conceptual" data-bs-toggle="tab" data-bs-target="#modelo-conceptual" type="button" role="tab" aria-controls="modelo-conceptual" aria-selected="false">
-                Modelo conceptual
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-estados" data-bs-toggle="tab" data-bs-target="#modelo-estados" type="button" role="tab" aria-controls="modelo-estados" aria-selected="false">
-                Estados y transiciones
-            </button>
-        </li>
-    </ul>
-
-    <div class="tab-content border-start border-end border-bottom p-3" id="modelosTabsContent">
-        {{-- 1) Datos --}}
-        <section class="tab-pane fade show active" id="modelo-datos" role="tabpanel" aria-labelledby="tab-datos" tabindex="0">
-            <div class="row g-3 align-items-start">
-                <div class="col-12 col-lg-9">
-                    <figure class="mb-0">
-                        <img class="img-fluid rounded shadow-sm" src="{{ asset('welcome/ModeloBaseDeDatos.svg') }}" alt="Diagrama del modelo de base de datos: sedes, programas, usuarios, recursos, préstamos y evidencias" loading="lazy">
-                        <figcaption class="form-text mt-2">Modelo de base de datos (SVG).</figcaption>
-                    </figure>
-                </div>
-                <div class="col-12 col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="h6">Resumen</h2>
-                            <ul class="mb-3">
-                                <li>Sedes y programas</li>
-                                <li>Usuarios y contactos</li>
-                                <li>Inventario</li>
-                                <li>Préstamos y evidencias</li>
-                            </ul>
-                            <a class="btn btn-outline-primary w-100" href="{{ asset('welcome/ModeloBaseDeDatos.svg') }}" download>Descargar SVG</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {{-- 2) Clases --}}
-        <section class="tab-pane fade" id="modelo-clases" role="tabpanel" aria-labelledby="tab-clases" tabindex="0">
-            <div class="row g-3 align-items-start">
-                <div class="col-12 col-lg-9">
-                    <figure class="mb-0">
-                        <img class="img-fluid rounded shadow-sm" src="{{ asset('welcome/ModeloDeClases.svg') }}" alt="Diagrama de clases Eloquent: User, Loan, Resource, LoanResource y LoanEvidence" loading="lazy">
-                        <figcaption class="form-text mt-2">Modelo de clases Eloquent (SVG).</figcaption>
-                    </figure>
-                </div>
-                <div class="col-12 col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="h6">Relaciones clave</h2>
-                            <ul class="mb-3">
-                                <li>User ⇢ hasMany Loan</li>
-                                <li>Loan ⇢ hasMany LoanResource</li>
-                                <li>Resource ⇢ hasMany LoanResource</li>
-                                <li>LoanResource ⇢ hasMany LoanEvidence</li>
-                            </ul>
-                            <a class="btn btn-outline-primary w-100" href="{{ asset('welcome/ModeloDeClases.svg') }}" download>Descargar SVG</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {{-- 3) Conceptual --}}
-        <section class="tab-pane fade" id="modelo-conceptual" role="tabpanel" aria-labelledby="tab-conceptual" tabindex="0">
-            <div class="row g-4">
-                <div class="col-12 col-lg-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h2 class="h6">Contexto</h2>
-                            <p class="mb-2">Gestión de préstamos de recursos físicos entre sedes y programas.</p>
-                            <ul class="mb-0">
-                                <li>Inventario por sede y tipo</li>
-                                <li>Préstamo con múltiples ítems</li>
-                                <li>Evidencias por entrega y devolución</li>
-                                <li>Auditoría con timestamps y soft delete</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h2 class="h6">Reglas</h2>
-                            <ul class="mb-0">
-                                <li>Un recurso aprobado o activo no se reasigna</li>
-                                <li>Devolución fuera de fecha ⇢ vencido</li>
-                                <li>Transición de estado de recurso al activar/cerrar</li>
-                                <li>Filtros por sede en listados y reportes</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {{-- 4) Estados --}}
-        <section class="tab-pane fade" id="modelo-estados" role="tabpanel" aria-labelledby="tab-estados" tabindex="0">
-            <div class="row g-4">
-                <div class="col-12 col-lg-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h2 class="h6">Préstamo</h2>
-                            <ol class="mb-0">
-                                <li>pendiente → aprobado → activo → completado</li>
-                                <li>pendiente → cancelado</li>
-                                <li>activo → vencido</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-6">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h2 class="h6">Recurso</h2>
-                            <ol class="mb-0">
-                                <li>disponible → en uso</li>
-                                <li>en uso → disponible</li>
-                                <li>cambios: mantenimiento o dañado</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+{{-- Hero / encabezado --}}
+<header class="mb-5">
+    <div class="bg-body-tertiary rounded-3 p-4 p-lg-5 shadow-sm border d-flex align-items-center justify-content-between gap-3">
+        <div>
+            <h1 class="display-6 fw-semibold text-body-emphasis mb-1">Modelos del Sistema</h1>
+            <p class="lead text-secondary mb-0">Arquitectura, dominio y flujos del SGRBU</p>
+        </div>
+        <div class="d-none d-md-block">
+            <img
+                src="{{ asset('images/global/imagotipo/IMAGOTIPO HORIZONTAL COLOR.png') }}"
+                alt="Imagotipo"
+                class="img-fluid"
+                style="max-height:56px;object-fit:contain">
+        </div>
     </div>
-</main>
+</header>
+
+{{-- Navegación por pestañas (tabs) --}}
+<ul class="nav nav-tabs mb-4" id="modelosTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="tab-arq" data-bs-toggle="tab" data-bs-target="#pane-arq" type="button" role="tab" aria-controls="pane-arq" aria-selected="true">
+            Arquitectura
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-erd" data-bs-toggle="tab" data-bs-target="#pane-erd" type="button" role="tab" aria-controls="pane-erd" aria-selected="false">
+            Entidades/Relaciones (ERD)
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-bd" data-bs-toggle="tab" data-bs-target="#pane-bd" type="button" role="tab" aria-controls="pane-bd" aria-selected="false">
+            Modelo de BD
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-clases" data-bs-toggle="tab" data-bs-target="#pane-clases" type="button" role="tab" aria-controls="pane-clases" aria-selected="false">
+            Modelo de Clases
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-pc" data-bs-toggle="tab" data-bs-target="#pane-pc" type="button" role="tab" aria-controls="pane-pc" aria-selected="false">
+            Puntos de Control
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="modelosTabsContent">
+    {{-- Pane: Arquitectura --}}
+    <div class="tab-pane fade show active" id="pane-arq" role="tabpanel" aria-labelledby="tab-arq">
+        <div class="row g-4 align-items-start">
+            <div class="col-12 col-lg-7">
+                <div class="position-relative">
+                    <figure class="figure d-block text-center m-0">
+                        <img
+                            src="{{ asset('images/welcome/Arquitectura.svg') }}"
+                            alt="Arquitectura del sistema"
+                            class="figure-img img-fluid rounded-3 shadow-sm w-100"
+                            style="max-height:520px;object-fit:contain">
+                        <figcaption class="figure-caption text-center">Capas de presentación, aplicación y datos, con componentes transversales (auth, autorización, auditoría).</figcaption>
+                    </figure>
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <a href="{{ asset('images/welcome/Arquitectura.svg') }}" download="Arquitectura.svg" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-download me-1"></i><span class="d-none d-sm-inline">Descargar SVG</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h5 text-body-emphasis mb-3">Resumen</h2>
+                        <p class="mb-3">
+                            Arquitectura cliente–servidor en <strong>Laravel 12</strong> con Blade + Bootstrap en la UI, controladores HTTP,
+                            middleware de autenticación/autorización y persistencia MySQL. Los activos subidos (evidencias) se sirven desde <code>storage/app/public</code> vía symlink.
+                        </p>
+                        <ul class="mb-0">
+                            <li><strong>Escalabilidad:</strong> separación por capas y cache de sesiones.</li>
+                            <li><strong>Seguridad:</strong> CSRF, políticas por rol y validación server-side.</li>
+                            <li><strong>Reutilización:</strong> API REST potencial y servicios de dominio.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Pane: ERD --}}
+    <div class="tab-pane fade" id="pane-erd" role="tabpanel" aria-labelledby="tab-erd">
+        <div class="row g-4 align-items-start">
+            <div class="col-12 col-lg-7 order-lg-2">
+                <div class="position-relative">
+                    <figure class="figure d-block text-center m-0">
+                        <img
+                            src="{{ asset('images/welcome/EntidadesRelaciones.svg') }}"
+                            alt="Entidades y relaciones"
+                            class="figure-img img-fluid rounded-3 shadow-sm w-100"
+                            style="max-height:520px;object-fit:contain">
+                        <figcaption class="figure-caption text-center">Usuario, Campus, Recurso, Préstamo, PrestamoRecurso y Evidencia con claves e integridad referencial.</figcaption>
+                    </figure>
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <a href="{{ asset('images/welcome/EntidadesRelaciones.svg') }}" download="EntidadesRelaciones.svg" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-download me-1"></i><span class="d-none d-sm-inline">Descargar SVG</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5 order-lg-1">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h5 text-body-emphasis mb-3">Propósito</h2>
+                        <ul class="mb-3">
+                            <li><strong>Consistencia:</strong> evita huérfanos y duplicados (p. ej., <code>resource_code</code> único).</li>
+                            <li><strong>Trazabilidad:</strong> evidencias asociadas a cada ítem prestado.</li>
+                            <li><strong>Escalabilidad:</strong> 3NF y catálogos ampliables.</li>
+                        </ul>
+                        <div class="small text-secondary">Base para migraciones, seeds y consultas Eloquent eficientes.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Pane: Modelo de BD --}}
+    <div class="tab-pane fade" id="pane-bd" role="tabpanel" aria-labelledby="tab-bd">
+        <div class="row g-4 align-items-start">
+            <div class="col-12 col-lg-7">
+                <div class="position-relative">
+                    <figure class="figure d-block text-center m-0">
+                        <img
+                            src="{{ asset('images/welcome/ModeloBaseDeDatos.svg') }}"
+                            alt="Modelo de base de datos"
+                            class="figure-img img-fluid rounded-3 shadow-sm w-100"
+                            style="max-height:520px;object-fit:contain">
+                        <figcaption class="figure-caption text-center">
+                            Esquema lógico con índices, claves foráneas y soft deletes donde aplique.
+                        </figcaption>
+                    </figure>
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <a href="{{ asset('images/welcome/ModeloBaseDeDatos.svg') }}"
+                            download="ModeloBaseDeDatos.svg"
+                            class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-download me-1"></i>
+                            <span class="d-none d-sm-inline">Descargar SVG</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-5">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h5 text-body-emphasis mb-3">Decisiones clave</h2>
+                        <ul class="mb-3">
+                            <li><strong>Índices:</strong> por estado y búsqueda frecuente (email, <code>resource_code</code>).</li>
+                            <li><strong>FK restrictivas:</strong> evitan borrar campus con préstamos activos.</li>
+                            <li><strong>Soft deletes:</strong> recuperación sin perder historial.</li>
+                        </ul>
+
+                        {{-- Botón de descarga del SQL (simple, para demo/presentación) --}}
+                        @env(['local','staging'])
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <a href="{{ asset('sgrbu.sql') }}"
+                                download="sgrbu.sql"
+                                class="btn btn-primary btn-sm">
+                                <i class="bi bi-download me-1"></i> Descargar SQL
+                            </a>
+                            <span class="text-secondary small">Solo visible en <code>local/staging</code>.</span>
+                        </div>
+                        @else
+                        <div class="alert alert-warning d-flex align-items-center py-2 px-3 small mb-0" role="alert">
+                            <i class="bi bi-shield-exclamation me-2"></i>
+                            Por seguridad, la descarga del SQL está deshabilitada en producción.
+                        </div>
+                        @endenv
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- Pane: Modelo de Clases --}}
+    <div class="tab-pane fade" id="pane-clases" role="tabpanel" aria-labelledby="tab-clases">
+        <div class="row g-4 align-items-start">
+            <div class="col-12 col-lg-7 order-lg-2">
+                <div class="position-relative">
+                    <figure class="figure d-block text-center m-0">
+                        <img
+                            src="{{ asset('images/welcome/ModeloDeClases.svg') }}"
+                            alt="Modelo de clases"
+                            class="figure-img img-fluid rounded-3 shadow-sm w-100"
+                            style="max-height:520px;object-fit:contain">
+                        <figcaption class="figure-caption text-center">Agregados y responsabilidades orientadas a objetos para reglas del dominio.</figcaption>
+                    </figure>
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <a href="{{ asset('images/welcome/ModeloDeClases.svg') }}" download="ModeloDeClases.svg" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-download me-1"></i><span class="d-none d-sm-inline">Descargar SVG</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5 order-lg-1">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h5 text-body-emphasis mb-3">Notas de diseño</h2>
+                        <ul class="mb-3">
+                            <li><strong>Comandos vs. consultas:</strong> métodos mutables (aprobar/activar) y puros (cálculo de retraso).</li>
+                            <li><strong>Enums:</strong> roles y estados tipados para evitar “strings mágicos”.</li>
+                            <li><strong>Servicios de dominio:</strong> validación de solicitudes y reglas invariantes.</li>
+                        </ul>
+                        <div class="small text-secondary">Facilita pruebas unitarias y mantiene la lógica lejos de controladores.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Pane: Puntos de Control --}}
+    <div class="tab-pane fade" id="pane-pc" role="tabpanel" aria-labelledby="tab-pc">
+        <div class="row g-4 align-items-start">
+            <div class="col-12 col-lg-7">
+                <div class="position-relative">
+                    <figure class="figure d-block text-center m-0">
+                        <img
+                            src="{{ asset('images/welcome/PuntosControl.svg') }}"
+                            alt="Puntos de control"
+                            class="figure-img img-fluid rounded-3 shadow-sm w-100"
+                            style="max-height:480px;object-fit:contain">
+                        <figcaption class="figure-caption text-center">Máquina de estados: pendiente → aprobado → activo → (vencido) → completado; cancelado como salida alternativa.</figcaption>
+                    </figure>
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <a href="{{ asset('images/welcome/PuntosControl.svg') }}" download="PuntosControl.svg" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-download me-1"></i><span class="d-none d-sm-inline">Descargar SVG</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h5 text-body-emphasis mb-3">Justificación</h2>
+                        <ol class="mb-3">
+                            <li><strong>Aprobación:</strong> control de calidad y permisos (staff/admin).</li>
+                            <li><strong>Activación:</strong> inventario en tránsito y bloqueo de duplicados.</li>
+                            <li><strong>Devolución/Vencimiento:</strong> KPIs y alertas de cumplimiento.</li>
+                        </ol>
+                        <div class="small text-secondary">Soporta auditoría, entrenamiento y pruebas end-to-end del flujo.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

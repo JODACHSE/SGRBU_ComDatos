@@ -9,6 +9,7 @@ use App\Models\CampusProgram;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -24,7 +25,7 @@ class UserController extends Controller
             ['name' => 'Gestión de Usuarios']
         ];
 
-        return view('modules.staff.users.index', [
+        return view('modules.users.index', [
             'users' => User::with(['documentType', 'gender', 'campusProgram'])
                 ->latest()
                 ->paginate(20),
@@ -40,7 +41,7 @@ class UserController extends Controller
             ['name' => 'Crear Usuario']
         ];
 
-        return view('modules.staff.users.create', [
+        return view('modules.users.create', [
             'documentTypes' => DocumentType::where('is_active', true)->get(),
             'genders' => Gender::where('is_active', true)->get(),
             'campusPrograms' => CampusProgram::with(['campus', 'program'])
@@ -50,9 +51,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -66,7 +64,7 @@ class UserController extends Controller
             'emergency_contact_name' => 'required|string|max:255',
             'emergency_contact_phone' => 'required|string|max:255',
             'role' => 'required|in:admin,staff,profesor,estudiante',
-            'campus_program_id' => 'nullable|exists:campus_program,id',
+            'campus_program_id' => 'nullable|exists:campus_programs,id',
             'academic_status' => 'required|in:activo,baja temporal,baja permanente,condicional,egresado',
             'student_code' => 'nullable|string|max:255|unique:users',
             'email' => 'required|email|unique:users',
@@ -80,37 +78,42 @@ class UserController extends Controller
             ->with('success', 'Usuario creado exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(User $user): View
     {
-        return view('users.show', [
-            'user' => $user->load(['documentType', 'gender', 'campusProgram', 'contacts', 'loans'])
+        $breadcrumbs = [
+            ['name' => 'Dashboard', 'url' => route('home')],
+            ['name' => 'Gestión de Usuarios', 'url' => route('users.index')],
+            ['name' => 'Detalles del Usuario']
+        ];
+
+        return view('modules.users.show', [
+            'user' => $user->load(['documentType', 'gender', 'campusProgram.campus', 'campusProgram.program', 'contacts', 'loans']),
+            'breadcrumbs' => $breadcrumbs
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(User $user): View
     {
-        return view('users.edit', [
+        $breadcrumbs = [
+            ['name' => 'Dashboard', 'url' => route('home')],
+            ['name' => 'Gestión de Usuarios', 'url' => route('users.index')],
+            ['name' => 'Editar Usuario']
+        ];
+
+        return view('modules.users.edit', [
             'user' => $user,
             'documentTypes' => DocumentType::where('is_active', true)->get(),
             'genders' => Gender::where('is_active', true)->get(),
             'campusPrograms' => CampusProgram::with(['campus', 'program'])
                 ->where('is_active', true)
-                ->get()
+                ->get(),
+            'breadcrumbs' => $breadcrumbs
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, User $user): RedirectResponse
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'second_name' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
@@ -120,13 +123,19 @@ class UserController extends Controller
             'gender_id' => 'required|exists:genders,id',
             'emergency_contact_name' => 'required|string|max:255',
             'emergency_contact_phone' => 'required|string|max:255',
-            'role' => 'required|in:admin,staff,profesor,estudiante',
-            'campus_program_id' => 'nullable|exists:campus_program,id',
+            'campus_program_id' => 'nullable|exists:campus_programs,id',
             'academic_status' => 'required|in:activo,baja temporal,baja permanente,condicional,egresado',
             'student_code' => 'nullable|string|max:255|unique:users,student_code,' . $user->id,
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
-        ]);
+        ];
+
+        // Solo admin puede cambiar el rol
+        if (Auth::user()->role === 'admin') {
+            $rules['role'] = 'required|in:admin,staff,profesor,estudiante';
+        }
+
+        $validated = $request->validate($rules);
 
         if (isset($validated['password'])) {
             $validated['password'] = bcrypt($validated['password']);
@@ -140,9 +149,6 @@ class UserController extends Controller
             ->with('success', 'Usuario actualizado exitosamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user): RedirectResponse
     {
         $user->delete();
@@ -150,9 +156,6 @@ class UserController extends Controller
             ->with('success', 'Usuario eliminado exitosamente.');
     }
 
-    /**
-     * Restore soft deleted user.
-     */
     public function restore($id): RedirectResponse
     {
         $user = User::withTrashed()->findOrFail($id);
@@ -161,24 +164,38 @@ class UserController extends Controller
             ->with('success', 'Usuario restaurado exitosamente.');
     }
 
-    /**
-     * Force delete user.
-     */
     public function forceDelete($id): RedirectResponse
     {
         $user = User::withTrashed()->findOrFail($id);
         $user->forceDelete();
-        return redirect()->route('users.index')
+        return redirect()->route('users.trashed')
             ->with('success', 'Usuario eliminado permanentemente.');
     }
 
-    /**
-     * Show trashed users.
-     */
     public function trashed(): View
     {
-        return view('users.trashed', [
-            'users' => User::onlyTrashed()->latest()->paginate(10)
+        $breadcrumbs = [
+            ['name' => 'Dashboard', 'url' => route('home')],
+            ['name' => 'Gestión de Usuarios', 'url' => route('users.index')],
+            ['name' => 'Usuarios Eliminados']
+        ];
+
+        return view('modules.users.trashed', [
+            'users' => User::onlyTrashed()->latest()->paginate(10),
+            'breadcrumbs' => $breadcrumbs
+        ]);
+    }
+
+    public function profile(): View
+    {
+        $user = Auth::user();
+
+        // Cargar relaciones usando with() en una nueva consulta
+        $userWithRelations = User::with(['documentType', 'gender', 'campusProgram.campus', 'campusProgram.program'])
+            ->find($user->id);
+
+        return view('modules.users.profile', [
+            'user' => $userWithRelations
         ]);
     }
 }

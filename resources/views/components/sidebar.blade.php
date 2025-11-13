@@ -35,6 +35,14 @@
                 </a>
             </div>
 
+            {{-- Catálogos --}}
+            <div class="mb-1">
+                <a href="{{ route('catalogs.index') }}" class="btn btn-outline-success w-100 text-start p-2 sidebar-item">
+                    <i class="bi bi-bookmarks me-2"></i>
+                    <span class="sidebar-text">Catálogos</span>
+                </a>
+            </div>
+
             {{-- Gestión de Recursos --}}
             <div class="mb-1">
                 <a href="{{ route('resources.index') }}" class="btn btn-outline-light w-100 text-start p-2 sidebar-item">
@@ -48,6 +56,22 @@
                 <a href="{{ route('loans.index') }}" class="btn btn-outline-light w-100 text-start p-2 sidebar-item">
                     <i class="bi bi-clipboard-check me-2"></i>
                     <span class="sidebar-text">Préstamos</span>
+                </a>
+            </div>
+
+            {{-- Gestión de Evidencias --}}
+            <div class="mb-1">
+                <a href="{{ route('loan-evidences.index') }}" class="btn btn-outline-light w-100 text-start p-2 sidebar-item">
+                    <i class="bi bi-camera-fill me-2"></i>
+                    <span class="sidebar-text">Evidencias</span>
+                </a>
+            </div>
+
+            {{-- Gestión de Alertas --}}
+            <div class="mb-1">
+                <a href="{{ route('alerts.index') }}" class="btn btn-outline-warning w-100 text-start p-2 sidebar-item">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <span class="sidebar-text">Alertas</span>
                 </a>
             </div>
 
@@ -66,15 +90,13 @@
                 </a>
             </div>
 
-            {{-- Solo para Admin --}}
-            @if($user->role === 'admin')
+            {{-- Contactos --}}
             <div class="mb-1">
-                <a href="{{ route('users.trashed') }}" class="btn btn-outline-warning w-100 text-start p-2 sidebar-item">
-                    <i class="bi bi-trash me-2"></i>
-                    <span class="sidebar-text">Eliminados</span>
+                <a href="{{ route('contacts.index') }}" class="btn btn-outline-light w-100 text-start p-2 sidebar-item">
+                    <i class="bi bi-person-lines-fill me-2"></i>
+                    <span class="sidebar-text">Contactos</span>
                 </a>
             </div>
-            @endif
         </div>
         @endif
 
@@ -86,7 +108,7 @@
             <div class="mb-1">
                 <a href="{{ route('loans.create') }}" class="btn btn-outline-light w-100 text-start p-2 sidebar-item">
                     <i class="bi bi-plus-circle me-2"></i>
-                    <span class="sidebar-text">Solicitar</span>
+                    <span class="sidebar-text">Solicitar Préstamo</span>
                 </a>
             </div>
 
@@ -97,29 +119,41 @@
                 </a>
             </div>
 
+            {{-- Para profesores: Inventario --}}
+            @if($user->role === 'profesor')
             <div class="mb-1">
-                <a href="#" class="btn btn-outline-light w-100 text-start p-2 sidebar-item">
-                    <i class="bi bi-person-circle me-2"></i>
-                    <span class="sidebar-text">Perfil</span>
+                <a href="{{ route('inventory.index') }}" class="btn btn-outline-info w-100 text-start p-2 sidebar-item">
+                    <i class="bi bi-box-seam me-2"></i>
+                    <span class="sidebar-text">Inventario</span>
+                </a>
+            </div>
+            @endif
+
+            {{-- Reportar Alertas --}}
+            <div class="mb-1">
+                <a href="{{ route('alerts.create') }}" class="btn btn-outline-warning w-100 text-start p-2 sidebar-item">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <span class="sidebar-text">Reportar Problema</span>
                 </a>
             </div>
         </div>
         @endif
 
-        {{-- Opciones Comunes--}}
+        {{-- Opciones Comunes --}}
         <div class="mb-4">
             <h6 class="text-muted small mb-1 sidebar-text">GENERAL</h6>
 
+            {{-- Perfil --}}
             <div class="mb-1">
-                <a href="#" class="btn btn-outline-info w-100 text-start p-2 sidebar-item">
-                    <i class="bi bi-question-circle me-2"></i>
-                    <span class="sidebar-text">Ayuda</span>
+                <a href="{{ route('profile.show') }}" class="btn btn-outline-info w-100 text-start p-2 sidebar-item">
+                    <i class="bi bi-person-circle me-2"></i>
+                    <span class="sidebar-text">Mi Perfil</span>
                 </a>
             </div>
 
-            {{-- Cerrar sesion --}}
+            {{-- Cerrar sesión --}}
             <div class="mb-1">
-                <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                <form action="{{ route('logout') }}" method="POST" class="d-inline w-100">
                     @csrf
                     <button type="submit" class="btn btn-outline-danger w-100 text-start p-2 sidebar-item">
                         <i class="bi bi-box-arrow-right me-2"></i>
@@ -127,7 +161,6 @@
                     </button>
                 </form>
             </div>
-
         </div>
     </div>
 </nav>
@@ -222,20 +255,10 @@
         }
     }
 
-    /* Overlay para móvil */
-    .sidebar-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-    }
-
-    .sidebar-overlay.show {
-        display: block;
+    /* Badge para contadores */
+    .sidebar-badge {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.4rem;
     }
 </style>
 
@@ -287,6 +310,19 @@
                 }
             } else {
                 sidebar.classList.remove('collapsed');
+            }
+        });
+
+        // Resaltar elemento activo
+        const currentPath = window.location.pathname;
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+
+        sidebarItems.forEach(item => {
+            const href = item.getAttribute('href');
+            if (href && currentPath.startsWith(href.replace(route('home'), ''))) {
+                item.classList.add('active');
+                item.classList.remove('btn-outline-light', 'btn-outline-info', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-danger');
+                item.classList.add('btn-primary');
             }
         });
     });

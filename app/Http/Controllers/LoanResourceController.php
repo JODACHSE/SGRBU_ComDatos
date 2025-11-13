@@ -16,8 +16,8 @@ class LoanResourceController extends Controller
      */
     public function index(): View
     {
-        return view('loan-resources.index', [
-            'loanResources' => LoanResource::with(['loan', 'resource'])->latest()->paginate(20)
+        return view('modules.loan-resources.index', [ // CORREGIDO
+            'loanResources' => LoanResource::with(['loan.user', 'loan.campus', 'resource'])->latest()->paginate(20)
         ]);
     }
 
@@ -26,9 +26,9 @@ class LoanResourceController extends Controller
      */
     public function create(): View
     {
-        return view('loan-resources.create', [
-            'loans' => Loan::where('is_active', true)->get(),
-            'resources' => Resource::where('is_active', true)->get()
+        return view('modules.loan-resources.create', [ // CORREGIDO
+            'loans' => Loan::where('is_active', true)->with('user')->get(),
+            'resources' => Resource::where('is_active', true)->where('resource_status_id', 1)->get() // Solo recursos disponibles
         ]);
     }
 
@@ -42,7 +42,22 @@ class LoanResourceController extends Controller
             'resource_id' => 'required|exists:resources,id',
         ]);
 
-        LoanResource::create($validated);
+        // Verificar que el recurso esté disponible
+        $resource = Resource::find($validated['resource_id']);
+        if ($resource->resource_status_id != 1) {
+            return redirect()->back()
+                ->with('error', 'El recurso no está disponible para préstamo.')
+                ->withInput();
+        }
+
+        LoanResource::create([
+            'loan_id' => $validated['loan_id'],
+            'resource_id' => $validated['resource_id'],
+            'is_active' => true
+        ]);
+
+        // Actualizar estado del recurso a "Prestado"
+        $resource->update(['resource_status_id' => 2]);
 
         return redirect()->route('loan-resources.index')
             ->with('success', 'Recurso de préstamo creado exitosamente.');
@@ -53,8 +68,8 @@ class LoanResourceController extends Controller
      */
     public function show(LoanResource $loanResource): View
     {
-        return view('loan-resources.show', [
-            'loanResource' => $loanResource->load(['loan', 'resource', 'loanEvidences'])
+        return view('modules.loan-resources.show', [ // CORREGIDO
+            'loanResource' => $loanResource->load(['loan.user', 'loan.campus', 'resource.resourceType', 'resource.resourceStatus', 'loanEvidences'])
         ]);
     }
 
@@ -63,9 +78,9 @@ class LoanResourceController extends Controller
      */
     public function edit(LoanResource $loanResource): View
     {
-        return view('loan-resources.edit', [
+        return view('modules.loan-resources.edit', [ // CORREGIDO
             'loanResource' => $loanResource,
-            'loans' => Loan::where('is_active', true)->get(),
+            'loans' => Loan::where('is_active', true)->with('user')->get(),
             'resources' => Resource::where('is_active', true)->get()
         ]);
     }
@@ -91,6 +106,11 @@ class LoanResourceController extends Controller
      */
     public function destroy(LoanResource $loanResource): RedirectResponse
     {
+        // Liberar recurso (cambiar estado a disponible)
+        if ($loanResource->resource) {
+            $loanResource->resource()->update(['resource_status_id' => 1]);
+        }
+
         $loanResource->delete();
 
         return redirect()->route('loan-resources.index')
